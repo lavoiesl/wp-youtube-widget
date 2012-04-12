@@ -10,6 +10,7 @@ class Youtube_Widget extends WP_Widget {
     'autoplay'   => false,
     'thumbnail'  => false,
     'show_title' => true,
+    'only_page'  => false,
   );
   private static $valid_id = '/^[a-z0-9\-_]+$/i';
 
@@ -25,6 +26,13 @@ class Youtube_Widget extends WP_Widget {
   }
 
   public function widget($args, $instance) {
+    if (!empty($instance['only_page'])) {
+      global $post;
+      if (strcasecmp($post->post_name, $instance['only_page']) !== 0) {
+        return;
+      }
+    }
+
     extract($args);
 
     /* User-selected settings. */
@@ -61,6 +69,7 @@ class Youtube_Widget extends WP_Widget {
       'height' => filter_var($new_instance['height'], FILTER_SANITIZE_NUMBER_INT),
       'show_title' => filter_var($new_instance['show_title'], FILTER_VALIDATE_BOOLEAN),
       'autoplay' => filter_var($new_instance['autoplay'], FILTER_VALIDATE_BOOLEAN),
+      'only_page' => filter_var($new_instance['only_page'], FILTER_SANITIZE_STRIPPED),
     );
 
     // Sanitize dimensions
@@ -237,6 +246,12 @@ class Youtube_Widget extends WP_Widget {
       <label for="{$inputs['show_title']['id']}">
         {$inputs['show_title']['title']}:
         <input id="{$inputs['show_title']['id']}"  name="{$inputs['show_title']['name']}" value="1" type="checkbox" $show_title>
+      </label>
+    </p>
+    <p>
+      <label for="{$inputs['only_page']['id']}">
+        {$inputs['only_page']['title']}:
+        <input class="widefat" id="{$inputs['only_page']['id']}" name="{$inputs['only_page']['name']}" type="text" value="{$inputs['only_page']['value']}">
       </label>
     </p>
 HTML;
