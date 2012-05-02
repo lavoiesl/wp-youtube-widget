@@ -2,15 +2,16 @@
 
 class Youtube_Widget extends WP_Widget {
   private static $default_options = array(
-    'title'      => false,
-    'video'      => false,
-    'videoid'    => false,
-    'width'      => 280,
-    'height'     => 200,
-    'autoplay'   => false,
-    'thumbnail'  => false,
-    'show_title' => true,
-    'only_page'  => false,
+    'title'        => false,
+    'video'        => false,
+    'videoid'      => false,
+    'width'        => 280,
+    'height'       => 200,
+    'autoplay'     => false,
+    'thumbnail'    => false,
+    'show_title'   => true,
+    'only_page'    => false,
+    'icl_language' => 'multilingual',
   );
   private static $valid_id = '/^[a-z0-9\-_]+$/i';
 
@@ -32,6 +33,13 @@ class Youtube_Widget extends WP_Widget {
         return;
       }
     }
+
+    /* Multilingual feature */
+    if (defined(ICL_LANGUAGE_CODE)) {
+      if (!in_array($instance['icl_language'], array('multilingual', ICL_LANGUAGE_CODE)))
+        return;
+    }
+
 
     extract($args);
 
@@ -217,6 +225,7 @@ class Youtube_Widget extends WP_Widget {
 
     // Notice that we don't need a complete form as it is embedded into the existing form.
     echo <<<HTML
+
     <p>
     <label for="{$inputs['title']['id']}">
         {$inputs['title']['title']}:
@@ -256,9 +265,15 @@ class Youtube_Widget extends WP_Widget {
     </p>
 HTML;
 
+    /* Multilingual feature */
+    if (function_exists('icl_widget_text_language_selectbox')) {
+      icl_widget_text_language_selectbox($instance['icl_language'], $this->get_field_name('icl_language'));
+    }
+
     // Video thumbnail
     if (!empty($instance['videoid'])) {
       echo <<<HTML
+
       <a href="{$inputs['video']['value']}" target="_blank" title="{$inputs['title']['value']}">
         <img style="width: 100%; height: auto" src="{$inputs['thumbnail']['value']}" width="{$inputs['width']['value']}" height="{$inputs['height']['value']}">
       </a>
