@@ -35,7 +35,7 @@ class Youtube_Widget extends WP_Widget {
     }
 
     /* Multilingual feature */
-    if (defined(ICL_LANGUAGE_CODE)) {
+    if (defined("ICL_LANGUAGE_CODE")) {
       if (!in_array($instance['icl_language'], array('multilingual', ICL_LANGUAGE_CODE)))
         return;
     }
