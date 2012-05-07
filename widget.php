@@ -35,7 +35,7 @@ class Youtube_Widget extends WP_Widget {
     }
 
     /* Multilingual feature */
-    if (defined("ICL_LANGUAGE_CODE")) {
+    if (defined("ICL_LANGUAGE_CODE") && !empty($instance['icl_language'])) {
       if (!in_array($instance['icl_language'], array('multilingual', ICL_LANGUAGE_CODE)))
         return;
     }
@@ -78,6 +78,7 @@ class Youtube_Widget extends WP_Widget {
       'show_title' => filter_var($new_instance['show_title'], FILTER_VALIDATE_BOOLEAN),
       'autoplay' => filter_var($new_instance['autoplay'], FILTER_VALIDATE_BOOLEAN),
       'only_page' => filter_var($new_instance['only_page'], FILTER_SANITIZE_STRIPPED),
+      'icl_language' => filter_var($new_instance['icl_language'], FILTER_SANITIZE_STRIPPED),
     );
 
     // Sanitize dimensions
